@@ -1,0 +1,26 @@
+{
+    "name": "Runkeeper-data",
+    "version": "0.1",
+    "description": "Get Runkeeper data",
+    "permissions": ["tabs", "declarativeContent", "storage", "https://runkeeper.com/", "http://runkeeper-data.com/"],
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+    "page_action": {
+        "default_title": "Runkeeper-data",
+        "default_icon": {
+            "32": "images/running32.png",
+            "48": "images/running48.png",
+            "64": "images/running64.png",
+            "128": "images/running128.png"
+        }
+    },
+    "icons": {
+      "32": "images/running32.png",
+      "48": "images/running48.png",
+      "64": "images/running64.png",
+      "128": "images/running128.png"
+    },
+    "manifest_version": 2
+}
