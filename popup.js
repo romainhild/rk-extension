@@ -11,25 +11,6 @@ chrome.storage.sync.get(['year','month','day'], function(result) {
     startDatePicker.value=`${ye}-${mo}-${da}`;
 });
 
-chrome.storage.sync.get({link: ''}, function(result) {
-    if( result['link'] ) {
-        var addDiv = document.getElementById("adress");
-        var button = document.createElement("input");
-        button.type = "button";
-        button.value = "Copy link";
-        button.addEventListener('click', function() {
-            navigator.clipboard.writeText(result['link']).then(
-                function() {
-                    chrome.browserAction.setBadgeText({text:""});
-                    chrome.storage.sync.set({'link': ''});
-                    window.close();
-                }
-            );
-        });
-        addDiv.appendChild(button);
-    }
-});
-
 let getAdress = document.getElementById("getAdress");
 getAdress.addEventListener("click", async () => {
     let startDate = startDatePicker.valueAsDate;
@@ -50,8 +31,8 @@ getAdress.addEventListener("click", async () => {
                                     {url: "https://runkeeper.com/exportData", active: false},
                                     function (tab) {
                                         chrome.runtime.sendMessage({action: "tabCreated"});
+                                        window.close();
                                     }
                                 );
                             });
-    window.close();
 });

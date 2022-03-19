@@ -8,12 +8,12 @@
       "64": "images/running64.png",
       "128": "images/running128.png"
     },
-    "manifest_version": 2,
+    "manifest_version": 3,
     "background": {
-        "scripts": ["background.js"],
-        "persistent": false
+        "service_worker": "background.js"
     },
-    "browser_action": {
+    "action": {
+        "default_title":"Get Runkeeper data",
         "default_popup": "popup.html",
         "default_icon": {
             "32": "images/running32.png",
@@ -22,5 +22,12 @@
             "128": "images/running128.png"            
         }
     },
-    "permissions": ["storage", "tabs", "https://runkeeper.com/"]
+    "permissions": ["declarativeContent","storage","tabs","scripting"],
+    "host_permissions": ["https://runkeeper.com/exportData"],
+    "web_accessible_resources": [
+        {
+          "resources": [ "conf.json" ],
+          "matches": ["<all_urls>"]
+        }
+    ]
 }
