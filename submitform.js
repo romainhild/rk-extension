@@ -8,5 +8,5 @@ chrome.storage.sync.get(['startYear','startMonth','startDay','endYear','endMonth
     var endInput = document.getElementById("endDate");
     endInput.value = `${da}-${mo}-${ye}`;
     chrome.runtime.sendMessage({action: "submit"});
-    //endInput.form.submit();
+    endInput.form.submit();
 });

@@ -64,6 +64,7 @@ function checkLink(sender) {
             {target:{tabId:sender.tab.id}, files:['findLink.js']},
             function(result) {
                 if(result[0]) {
+                    chrome.tabs.remove(sender.tab.id);
                     const confURL = chrome.runtime.getURL('conf.json');
                     fetch(confURL)
                     .then((response) => {return response.json()})
@@ -71,7 +72,7 @@ function checkLink(sender) {
                         fetch("https://"+json["url"]+"/update", {
                             method: "POST",
                             headers: {'Content-Type': 'text/plain'}, 
-                            body: result[0]["result"]+"toto"
+                            body: result[0]["result"]
                         })
                         .then((response) => { 
                             if( response.status != 200 ) {
