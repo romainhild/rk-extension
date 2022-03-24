@@ -63,26 +63,8 @@ function checkLink(sender) {
         chrome.scripting.executeScript(
             {target:{tabId:sender.tab.id}, files:['findLink.js']},
             function(result) {
-                if(result[0]) {
-                    chrome.tabs.remove(sender.tab.id);
-                    const confURL = chrome.runtime.getURL('conf.json');
-                    fetch(confURL)
-                    .then((response) => {return response.json()})
-                    .then((json) => {
-                        fetch("https://"+json["url"]+"/update", {
-                            method: "POST",
-                            headers: {'Content-Type': 'text/plain'}, 
-                            body: result[0]["result"]
-                        })
-                        .then((response) => { 
-                            if( response.status != 200 ) {
-                                console.log(response.statusText);
-                            }
-                            return response.text();
-                        })
-                        .then((response) => { console.log(response); })
-                        .catch((error) => { console.log(error.message)});
-                    });
+                if(result[0]["result"]) {
+                    useLink(result[0]["result"], sender.tab.id);
                 }
                 else {
                     setTimeout(checkLink, 2000, sender);
@@ -90,3 +72,38 @@ function checkLink(sender) {
             });
     });
 };
+
+function useLink(link, tabId) {
+    chrome.tabs.remove(tabId);
+    const confURL = chrome.runtime.getURL('conf.json');
+    fetch(confURL)
+    .then((response) => {return response.json()})
+    .then((json) => {
+        fetch("https://"+json["url"]+"/update", {
+            method: "POST",
+            headers: {'Content-Type': 'text/plain'}, 
+            body: link
+        })
+        .then((response) => { 
+            if( response.status == 200 ) {
+                setTimeout(reloadTabs, 3000);
+            } else {
+                console.log(response.statusText);
+            }
+            return response.text();
+        })
+        .then((response) => { console.log(response); })
+        .catch((error) => { console.log(error.message)});
+    });
+}
+
+function reloadTabs() {
+    chrome.tabs.query(
+        {title:"Runkeeper Data"},
+        function(tabs) {
+            for(var i = 0; i < tabs.length; i++){
+                chrome.tabs.reload(tabs[i].id);
+            }
+        }
+    );
+}
